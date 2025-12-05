@@ -536,7 +536,7 @@ pub const GamepadState = extern struct { buttons: [15]u8, axes: [6]f32 };
 
 extern fn glfwInit() c_int;
 
-pub fn init() !void {
+pub fn init() GLFWError!void {
     if (glfwInit() != 1) {
         return GLFWError.PlatformError;
     }
@@ -587,6 +587,11 @@ extern fn glfwGetVersion(major: *c_int, minor: *c_int, rev: *c_int) void;
 extern fn glfwGetVersionString() [*:0]const u8;
 pub const getVersion = glfwGetVersion;
 pub const getVersionString = glfwGetVersionString;
+
+extern fn glfwGetPlatform() c_int;
+pub fn getPlatform() PlatformHint {
+    return glfwGetPlatform();
+}
 
 extern fn glfwSetErrorCallback(callback: ErrorFun) ErrorFun;
 pub const setErrorCallback = glfwSetErrorCallback;
@@ -708,7 +713,7 @@ pub fn windowHintString(hint: WindowHint, value: [*:0]const u8) void {
 }
 
 extern fn glfwCreateWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) ?*Window;
-pub fn createWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) !*Window {
+pub fn createWindow(width: c_int, height: c_int, title: [*:0]const u8, monitor: ?*Monitor, share: ?*Window) GLFWError!*Window {
     const res = glfwCreateWindow(width, height, title, monitor, share);
     errorCheck2();
     if (res == null) {
